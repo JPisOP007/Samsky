@@ -1,0 +1,21 @@
+{
+  "name": "samsky-drone-systems-backend",
+  "version": "1.0.0",
+  "description": "Backend services for Samsky Drone Systems",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "drone",
+    "express",
+    "backend"
+  ],
+  "author": "Antigravity",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

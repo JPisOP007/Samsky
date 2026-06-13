@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samsky Admin Portal - Inquiries Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      /* PuBu-derived light palette */
+      --bg: #f4f6fb;
+      /* near-white with a hint of lavender */
+      --bg-alt: #e8edf6;
+      /* slightly deeper for contrast rows */
+      --surface: #ffffff;
+      --surface-2: #f0f4fa;
+      /* card backgrounds */
+      --border: #c8d4e8;
+      --border-mid: #a4b8d8;
+
+      --pubu-1: #d0d9ee;
+      /* lightest purple-blue */
+      --pubu-2: #a8bcd8;
+      --pubu-3: #6b9ec4;
+      /* mid steel blue — main accent */
+      --pubu-4: #2f7ab4;
+      /* strong blue */
+      --pubu-5: #0a5a8c;
+      /* deep navy */
+      --pubu-6: #023858;
+      /* darkest — text, headers */
+
+      --accent: var(--pubu-4);
+      --accent-dark: var(--pubu-5);
+
+      --text: #0f2233;
+      --text-mid: #3d5a78;
+      --text-muted: #7a96b2;
+
+      --success: #1a7a4a;
+      --error: #c0392b;
+
+      --font-mono: 'Orbitron', monospace;
+      --font-sans: 'DM Sans', sans-serif;
+
+      --radius: 14px;
+      --shadow-sm: 0 1px 4px rgba(10, 40, 80, 0.07);
+      --shadow-md: 0 4px 16px rgba(10, 40, 80, 0.1);
+      --shadow-lg: 0 12px 36px rgba(10, 40, 80, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 3rem;
+    }
+
+    /* AUTH SCREEN */
+    #auth-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      background: var(--bg);
+    }
+
+    .auth-card {
+      width: 90%;
+      max-width: 400px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .auth-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-weight: 900;
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 2rem;
+      color: var(--pubu-6);
+    }
+
+    .auth-logo-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--pubu-4);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .auth-card h2 {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .auth-card>p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.4rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-mid);
+      margin-bottom: 0.45rem;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: var(--font-sans);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47, 122, 180, 0.12);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-muted);
+    }
+
+    .btn-login {
+      width: 100%;
+      background: var(--pubu-4);
+      color: #fff;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+    }
+
+    .btn-login:hover {
+      background: var(--pubu-5);
+      transform: translateY(-1px);
+    }
+
+    #auth-error {
+      color: var(--error);
+      font-size: 0.83rem;
+      margin-top: 0.9rem;
+      display: none;
+    }
+
+    /* MAIN APP */
+    #dashboard-app {
+      display: none;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-weight: 900;
+      font-size: 1.2rem;
+      letter-spacing: 0.07em;
+      color: var(--pubu-6);
+    }
+
+    .header-logo span {
+      color: var(--pubu-4);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-action {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.18s;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-sans);
+    }
+
+    .btn-action svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .btn-action:hover {
+      background: var(--surface-2);
+      border-color: var(--border-mid);
+      color: var(--text);
+    }
+
+    .btn-danger {
+      border-color: #e0b3b0;
+      color: var(--error);
+    }
+
+    .btn-danger:hover {
+      background: #fdf0ef;
+      border-color: #c0392b;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--pubu-3);
+    }
+
+    .stat-label {
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--pubu-5);
+      line-height: 1.1;
+    }
+
+    .stat-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    /* TABLE BLOCK */
+    .table-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    .search-filter {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      flex-grow: 1;
+      max-width: 580px;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex-grow: 1;
+    }
+
+    .filter-dropdown {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      font-size: 0.88rem;
+      outline: none;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+
+    .filter-dropdown:focus {
+      border-color: var(--accent);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: var(--surface-2);
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-mid);
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--bg-alt);
+      color: var(--text);
+    }
+
+    tbody tr {
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+
+    tbody tr:hover {
+      background: var(--surface-2);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .tag-vtol {
+      background: #ddeaf8;
+      color: #1a5a9a;
+      border: 1px solid #b0cde8;
+    }
+
+    .tag-underwater {
+      background: #d4eef2;
+      color: #0d6b78;
+      border: 1px solid #9fd5dd;
+    }
+
+    .tag-general {
+      background: var(--pubu-1);
+      color: var(--pubu-5);
+      border: 1px solid var(--pubu-2);
+    }
+
+    .tag-defence {
+      background: #fde8e6;
+      color: #a02020;
+      border: 1px solid #f0c0bc;
+    }
+
+    .timestamp {
+      color: var(--text-muted);
+      font-size: 0.81rem;
+    }
+
+    .detail-row {
+      background: var(--bg);
+      display: none;
+    }
+
+    .detail-row.open {
+      display: table-row;
+    }
+
+    .detail-content {
+      padding: 1.4rem;
+      border-left: 3px solid var(--pubu-3);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0.7rem;
+      font-size: 0.87rem;
+      margin-bottom: 1rem;
+    }
+
+    .detail-label {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .message-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem;
+      color: var(--text);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      margin-top: 0.5rem;
+      font-size: 0.88rem;
+    }
+
+    .empty-state {
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state svg {
+      width: 44px;
+      height: 44px;
+      stroke: var(--text-muted);
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .control-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-filter {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #dashboard-app {
+        padding: 1rem;
+      }
+
+      th,
+      td {
+        padding: 0.75rem 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">SS</div>
+        SAMSKY ADMIN
+      </div>
+      <h2>Secure Access</h2>
+      <p>Enter your credentials to view portal inquiries</p>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password-input" class="form-control" placeholder="••••••••" required autofocus>
+        </div>
+        <button type="submit" class="btn-login">Login</button>
+        <div id="auth-error">Incorrect password. Please try again.</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="dashboard-app">
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="auth-logo-icon" style="width:2rem; height:2rem; font-size:0.65rem;">SS</div>
+        SAMSKY <span>DRONE SYSTEMS</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn-action" onclick="fetchData()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+          </svg>
+          Refresh
+        </button>
+        <button class="btn-action btn-danger" onclick="handleLogout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Inquiries</div>
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-desc">Inquiries registered in database</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Defence / Navy</div>
+        <div class="stat-value" id="stat-defence">0</div>
+        <div class="stat-desc">Critical government requests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">VTOL Hybrid</div>
+        <div class="stat-value" id="stat-vtol">0</div>
+        <div class="stat-desc">Flagship system inquiries</div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="control-row">
+        <div class="search-filter">
+          <div class="search-input-wrap">
+            <input type="text" id="search-input" class="form-control"
+              placeholder="Search by name, organisation, message..." oninput="filterData()">
+          </div>
+          <select id="interest-filter" class="filter-dropdown" onchange="filterData()">
+            <option value="ALL">All Interests</option>
+            <option value="VTOL Hybrid System">VTOL Hybrid System</option>
+            <option value="Underwater Drone">Underwater Drone</option>
+            <option value="Training Systems">Training Systems</option>
+            <option value="Defence Surveillance">Defence Surveillance</option>
+            <option value="CFD / Engineering Services">CFD / Engineering Services</option>
+            <option value="Government Procurement">Government Procurement</option>
+          </select>
+        </div>
+        <button class="btn-action" onclick="exportToCSV()" style="border-color: #a8d4b8; color: var(--success);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Export CSV
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="submissions-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Organisation</th>
+              <th>Email Address</th>
+              <th>Area of Interest</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+
+        <div id="no-data" class="empty-state" style="display:none;">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <p>No inquiries found matching your filters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let rawSubmissions = [];
+    let activeSubmissions = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('samsky_token');
+      if (token) showApp();
+    });
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('password-input').value;
+      const errorDiv = document.getElementById('auth-error');
+
+      localStorage.setItem('samsky_token', pwd);
+
+      fetch('/api/submissions', {
+        headers: { 'Authorization': `Bearer ${pwd}` }
+      })
+        .then(res => {
+          if (res.ok) {
+            showApp();
+          } else {
+            localStorage.removeItem('samsky_token');
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = 'Invalid administrator password.';
+          }
+        })
+        .catch(err => {
+          localStorage.removeItem('samsky_token');
+          errorDiv.style.display = 'block';
+          errorDiv.textContent = 'Server response error. Is the server running?';
+          console.error(err);
+        });
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('samsky_token');
+      document.getElementById('dashboard-app').style.display = 'none';
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('password-input').value = '';
+      document.getElementById('auth-error').style.display = 'none';
+    }
+
+    function showApp() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('dashboard-app').style.display = 'block';
+      fetchData();
+    }
+
+    async function fetchData() {
+      const token = localStorage.getItem('samsky_token');
+      if (!token) return handleLogout();
+
+      try {
+        const res = await fetch('/api/submissions', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.status === 401 || res.status === 403) return handleLogout();
+
+        const data = await res.json();
+        if (data.success) {
+          rawSubmissions = data.submissions;
+          filterData();
+        }
+      } catch (err) {
+        alert('Failed to connect to backend server. Make sure node server.js is running.');
+        console.error(err);
+      }
+    }
+
+    function updateStats(items) {
+      document.getElementById('stat-total').textContent = items.length;
+
+      const govSectors = ['Indian Army', 'Indian Navy', 'DRDO', 'HAL', 'Defence', 'Army', 'Navy', 'Government'];
+      const defenceCount = items.filter(entry => {
+        const text = (entry.organisation + ' ' + entry.interest + ' ' + entry.message).toLowerCase();
+        return govSectors.some(s => text.includes(s.toLowerCase())) ||
+          entry.interest === 'Government Procurement' ||
+          entry.interest === 'Defence Surveillance';
+      }).length;
+      document.getElementById('stat-defence').textContent = defenceCount;
+
+      const vtolCount = items.filter(entry => entry.interest === 'VTOL Hybrid System').length;
+      document.getElementById('stat-vtol').textContent = vtolCount;
+    }
+
+    function filterData() {
+      const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+      const interestFilter = document.getElementById('interest-filter').value;
+
+      activeSubmissions = rawSubmissions.filter(entry => {
+        if (interestFilter !== 'ALL' && entry.interest !== interestFilter) return false;
+        if (searchQuery) {
+          const matchText = [entry.name, entry.organisation, entry.email, entry.interest, entry.message].join(' ').toLowerCase();
+          return matchText.includes(searchQuery);
+        }
+        return true;
+      });
+
+      renderTable();
+      updateStats(activeSubmissions);
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('table-body');
+      const emptyState = document.getElementById('no-data');
+      tbody.innerHTML = '';
+
+      if (activeSubmissions.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      activeSubmissions.forEach(entry => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('onclick', `toggleDetails('${entry.id}')`);
+
+        const date = new Date(entry.timestamp);
+        const formattedDate = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) +
+          ' ' + date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+        let tagClass = 'tag-general';
+        if (entry.interest.includes('VTOL')) tagClass = 'tag-vtol';
+        else if (entry.interest.includes('Underwater')) tagClass = 'tag-underwater';
+        else if (entry.interest.includes('Defence') || entry.interest.includes('Government')) tagClass = 'tag-defence';
+
+        tr.innerHTML = `
+          <td class="timestamp">${formattedDate}</td>
+          <td style="font-weight:600;">${escapeHTML(entry.name)}</td>
+          <td>${entry.organisation ? escapeHTML(entry.organisation) : '<span style="color:var(--text-muted);">—</span>'}</td>
+          <td><a href="mailto:${entry.email}" style="color:var(--accent); text-decoration:underline;" onclick="event.stopPropagation();">${escapeHTML(entry.email)}</a></td>
+          <td><span class="tag ${tagClass}">${escapeHTML(entry.interest)}</span></td>
+        `;
+
+        const detailTr = document.createElement('tr');
+        detailTr.id = `detail-${entry.id}`;
+        detailTr.className = 'detail-row';
+        detailTr.innerHTML = `
+          <td colspan="5">
+            <div class="detail-content">
+              <div class="detail-grid">
+                <span class="detail-label">Name:</span>
+                <span>${escapeHTML(entry.name)}</span>
+                <span class="detail-label">Organisation:</span>
+                <span>${entry.organisation ? escapeHTML(entry.organisation) : '<span style="color:var(--text-muted);">Not specified</span>'}</span>
+                <span class="detail-label">Email:</span>
+                <span>${escapeHTML(entry.email)}</span>
+                <span class="detail-label">Interest:</span>
+                <span>${escapeHTML(entry.interest)}</span>
+              </div>
+              <div class="detail-label">Message:</div>
+              <div class="message-box">${entry.message ? escapeHTML(entry.message) : '<span style="color:var(--text-muted); font-style:italic;">No message provided.</span>'}</div>
+            </div>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+        tbody.appendChild(detailTr);
+      });
+    }
+
+    function toggleDetails(id) {
+      const panel = document.getElementById(`detail-${id}`);
+      if (panel.classList.contains('open')) {
+        panel.classList.remove('open');
+      } else {
+        document.querySelectorAll('.detail-row').forEach(row => row.classList.remove('open'));
+        panel.classList.add('open');
+      }
+    }
+
+    function exportToCSV() {
+      if (activeSubmissions.length === 0) return alert('No data to export');
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Date,Name,Organisation,Email,Area of Interest,Message\r\n";
+
+      activeSubmissions.forEach(entry => {
+        const date = new Date(entry.timestamp).toISOString();
+        csvContent += `"${date}","${escapeCSVField(entry.name)}","${escapeCSVField(entry.organisation)}","${escapeCSVField(entry.email)}","${escapeCSVField(entry.interest)}","${escapeCSVField(entry.message)}"\r\n`;
+      });
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("download", `samsky_inquiries_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+    }
+
+    function escapeCSVField(str) {
+      if (!str) return '';
+      return str.replace(/"/g, '""').replace(/\r?\n|\r/g, ' ');
+    }
+  </script>
+</body>
+
+</html>

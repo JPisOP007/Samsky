@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Samsky Drone System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">SS</span>
+        <span class="logo-text">SAM<span class="logo-accent">SKY</span> DRONE SYSTEM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#targets">Sectors</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#products" onclick="closeMobile()">Products</a></li>
+      <li><a href="#services" onclick="closeMobile()">Services</a></li>
+      <li><a href="#targets" onclick="closeMobile()">Sectors</a></li>
+      <li><a href="#about" onclick="closeMobile()">About</a></li>
+      <li><a href="#contact" onclick="closeMobile()">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Government Projects · Defence · Aerospace
+      </div>
+      <h1 class="hero-title">
+        <span class="line-reveal">The Sky is</span>
+        <span class="line-reveal delay-1">No Longer</span>
+        <span class="line-reveal delay-2 accent-text">A Limit</span>
+      </h1>
+      <p class="hero-sub">
+        Advanced unmanned aerial systems engineered for India's defence,
+        surveillance, and civilian missions. VTOL · Underwater · Training Systems.
+      </p>
+      <div class="hero-actions">
+        <a href="#products" class="btn-primary">Explore Systems</a>
+        <a href="#contact" class="btn-ghost">Request Briefing</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">4+</span>
+          <span class="stat-label">Product Lines</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">6+</span>
+          <span class="stat-label">Service Verticals</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Defence Sectors</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRONE VIEWER -->
+    <div class="hero-drone">
+      <div class="drone-frame">
+
+        <!-- Toggle buttons -->
+        <div class="view-toggle">
+          <button class="toggle-btn active" onclick="showView('model')" id="btn-model">🔄 3D Model</button>
+          <button class="toggle-btn" onclick="showView('video')" id="btn-video">▶ Video</button>
+        </div>
+
+        <!-- 3D MODEL VIEW — Three.js OBJ loader -->
+        <div class="embed-view" id="view-model">
+          <canvas id="drone-canvas"></canvas>
+          <div class="model-loading" id="model-loading-ui">
+            <div class="loading-bar-track">
+              <div class="loading-bar-fill" id="loading-fill"></div>
+            </div>
+            <span class="loading-text" id="loading-text">Loading drone model…</span>
+          </div>
+          <div class="model-hint">drag to rotate · scroll to zoom</div>
+        </div>
+
+        <!-- VIDEO VIEW — Bayraktar TB2 UAV -->
+        <div class="embed-view" id="view-video" style="display:none">
+          <iframe id="yt-iframe" title="Bayraktar TB2 Military UAV" frameborder="0" allowfullscreen
+            allow="autoplay; encrypted-media; picture-in-picture" src=""
+            data-src="https://www.youtube.com/embed/Wil6V0sYHf8?autoplay=1&mute=1&loop=1&playlist=Wil6V0sYHf8&controls=1&rel=0&modestbranding=1"></iframe>
+        </div>
+
+        <div class="drone-ring drone-ring-1"></div>
+        <div class="drone-ring drone-ring-2"></div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>VTOL Systems</span><span class="sep">✦</span>
+      <span>Flood Monitoring</span><span class="sep">✦</span>
+      <span>Defence Grade</span><span class="sep">✦</span>
+      <span>Indian Navy</span><span class="sep">✦</span>
+      <span>CFD Analysis</span><span class="sep">✦</span>
+      <span>3D Printing</span><span class="sep">✦</span>
+      <span>Composite Fabrication</span><span class="sep">✦</span>
+      <span>Government Projects</span><span class="sep">✦</span>
+      <span>Training Systems</span><span class="sep">✦</span>
+      <span>Underwater Drones</span><span class="sep">✦</span>
+      <!-- duplicate for seamless loop -->
+      <span>VTOL Systems</span><span class="sep">✦</span>
+      <span>Flood Monitoring</span><span class="sep">✦</span>
+      <span>Defence Grade</span><span class="sep">✦</span>
+      <span>Indian Navy</span><span class="sep">✦</span>
+      <span>CFD Analysis</span><span class="sep">✦</span>
+      <span>3D Printing</span><span class="sep">✦</span>
+      <span>Composite Fabrication</span><span class="sep">✦</span>
+      <span>Government Projects</span><span class="sep">✦</span>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section class="section" id="products">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Our Platforms</span>
+        <h2 class="section-title">Engineered for<br><em>Every Mission</em></h2>
+        <p class="section-desc">From hybrid vertical take-off to underwater exploration — SamSky systems are built for
+          real-world operational demands.</p>
+      </div>
+
+      <div class="products-grid">
+        <div class="product-card featured" data-reveal>
+          <!-- VTOL Hybrid icon: fixed-wing + rotor hybrid -->
+          <div class="product-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 10 L44 26 L36 26 L36 38 L12 38 L12 26 L4 26 Z" stroke="currentColor" stroke-width="2"
+                stroke-linejoin="round" fill="none" />
+              <circle cx="24" cy="24" r="4" stroke="currentColor" stroke-width="2" fill="none" />
+              <line x1="24" y1="6" x2="24" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="17" y1="7" x2="20" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="31" y1="7" x2="28" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="product-tag">Flagship</div>
+          <h3>VTOL Hybrid</h3>
+          <p>Vertical Take-Off and Landing drone with hybrid propulsion. Combines fixed-wing endurance with multirotor
+            flexibility for extended range missions.</p>
+          <div class="product-specs">
+            <span>Long Endurance</span>
+            <span>Hybrid Propulsion</span>
+            <span>VTOL Capability</span>
+          </div>
+          <a href="#contact" class="product-link">Get Specifications →</a>
+        </div>
+
+        <div class="product-card" data-reveal>
+          <!-- Underwater Drone icon: submarine/torpedo shape -->
+          <div class="product-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="22" cy="24" rx="16" ry="8" stroke="currentColor" stroke-width="2" fill="none" />
+              <path d="M38 24 L44 20 L44 28 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                fill="none" />
+              <path d="M16 16 L16 10 L20 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" fill="none" />
+              <circle cx="30" cy="24" r="2.5" stroke="currentColor" stroke-width="2" fill="none" />
+              <path d="M6 30 Q12 34 18 30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                fill="none" />
+              <path d="M10 34 Q16 38 22 34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                fill="none" />
+            </svg>
+          </div>
+          <h3>Underwater Drone</h3>
+          <p>Submersible unmanned vehicle for naval reconnaissance, underwater infrastructure inspection, and aquatic
+            surveillance operations.</p>
+          <div class="product-specs">
+            <span>Naval Use</span>
+            <span>Deep Dive</span>
+            <span>HD Imaging</span>
+          </div>
+          <a href="#contact" class="product-link">Learn More →</a>
+        </div>
+
+        <div class="product-card" data-reveal>
+          <!-- Training Plane icon: classic fixed-wing aircraft -->
+          <div class="product-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 24 L40 18 L40 22 L28 24 L40 26 L40 30 L8 24 Z" stroke="currentColor" stroke-width="2"
+                stroke-linejoin="round" fill="none" />
+              <path d="M20 24 L16 14 L20 14 L24 24" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                fill="none" />
+              <path d="M36 24 L34 20 L37 20 L38 24" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"
+                fill="none" />
+            </svg>
+          </div>
+          <h3>Training Plane</h3>
+          <p>Fixed-wing training aircraft for UAV pilot certification programs, offering stable flight characteristics
+            and real-world mission simulation.</p>
+          <div class="product-specs">
+            <span>Pilot Training</span>
+            <span>Stable Airframe</span>
+            <span>Mission Sim</span>
+          </div>
+          <a href="#contact" class="product-link">Learn More →</a>
+        </div>
+
+        <div class="product-card" data-reveal>
+          <!-- Training Drone icon: quadcopter top-down -->
+          <div class="product-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="8" height="8" rx="1" stroke="currentColor" stroke-width="2" fill="none" />
+              <line x1="20" y1="20" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="28" y1="20" x2="36" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="20" y1="28" x2="12" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="28" y1="28" x2="36" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <ellipse cx="12" cy="12" rx="5" ry="2.5" stroke="currentColor" stroke-width="1.5" fill="none" />
+              <ellipse cx="36" cy="12" rx="5" ry="2.5" stroke="currentColor" stroke-width="1.5" fill="none" />
+              <ellipse cx="12" cy="36" rx="5" ry="2.5" stroke="currentColor" stroke-width="1.5" fill="none" />
+              <ellipse cx="36" cy="36" rx="5" ry="2.5" stroke="currentColor" stroke-width="1.5" fill="none" />
+            </svg>
+          </div>
+          <h3>Training Drone</h3>
+          <p>Multi-rotor training drone designed for operational readiness programs. Rugged, reliable, and purpose-built
+            for defence training environments.</p>
+          <div class="product-specs">
+            <span>Defence Training</span>
+            <span>Rugged Build</span>
+            <span>Multi-Rotor</span>
+          </div>
+          <a href="#contact" class="product-link">Learn More →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section-alt" id="services">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Capabilities</span>
+        <h2 class="section-title">End-to-End<br><em>Services</em></h2>
+        <p class="section-desc">Beyond hardware — SamSky delivers complete engineering solutions across aerospace,
+          mechanical, and robotics domains.</p>
+      </div>
+
+      <div class="services-bento">
+        <div class="service-tile tall" data-reveal>
+          <div class="tile-num">01</div>
+          <!-- Maintenance: wrench + gear -->
+          <div class="tile-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M34 8 C34 8 38 12 36 18 L28 26 L22 20 L30 12 C30 12 30 8 34 8 Z" stroke="currentColor"
+                stroke-width="2" stroke-linejoin="round" fill="none" />
+              <path d="M22 20 L12 30 C10 32 10 35 12 37 C14 39 17 39 19 37 L29 27" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" fill="none" />
+              <circle cx="15" cy="34" r="2" stroke="currentColor" stroke-width="1.5" fill="none" />
+            </svg>
+          </div>
+          <h3>Maintenance</h3>
+          <p>Full-cycle maintenance programs for UAV platforms. Preventive, corrective, and overhaul services for
+            operational continuity.</p>
+        </div>
+        <div class="service-tile" data-reveal>
+          <div class="tile-num">02</div>
+          <!-- CFD Analysis: airflow streamlines over airfoil -->
+          <div class="tile-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 24 Q16 12 32 18 Q40 21 40 24 Q40 27 32 30 Q16 36 8 24 Z" stroke="currentColor"
+                stroke-width="2" fill="none" />
+              <path d="M4 16 Q12 16 18 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                fill="none" />
+              <path d="M4 24 Q10 24 16 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                fill="none" />
+              <path d="M4 32 Q12 32 18 28" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                fill="none" />
+              <path d="M40 18 Q44 20 44 24 Q44 28 40 30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                fill="none" />
+            </svg>
+          </div>
+          <h3>CFD Analysis</h3>
+          <p>Computational Fluid Dynamics simulation for aerodynamic optimization and performance validation.</p>
+        </div>
+        <div class="service-tile" data-reveal>
+          <div class="tile-num">03</div>
+          <!-- Composite Fabrication: layered material cross-section -->
+          <div class="tile-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="10" width="32" height="6" rx="1" stroke="currentColor" stroke-width="2" fill="none" />
+              <rect x="8" y="19" width="32" height="6" rx="1" stroke="currentColor" stroke-width="2" fill="none" />
+              <rect x="8" y="28" width="32" height="6" rx="1" stroke="currentColor" stroke-width="2" fill="none" />
+              <line x1="14" y1="10" x2="14" y2="34" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" />
+              <line x1="22" y1="10" x2="22" y2="34" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" />
+              <line x1="30" y1="10" x2="30" y2="34" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" />
+              <path d="M8 38 L40 38" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3>Composite Fabrication</h3>
+          <p>Lightweight, high-strength composite materials manufacturing for airframe structures and UAV components.
+          </p>
+        </div>
+        <div class="service-tile wide" data-reveal>
+          <div class="tile-num">04</div>
+          <!-- Aerospace/Mechanical/Robotics: circuit + cog hybrid -->
+          <div class="tile-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+              <circle cx="24" cy="24" r="3" stroke="currentColor" stroke-width="1.5" fill="none" />
+              <line x1="24" y1="6" x2="24" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="24" y1="32" x2="24" y2="42" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="6" y1="24" x2="16" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="32" y1="24" x2="42" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="10" y1="10" x2="17" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="31" y1="31" x2="38" y2="38" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="38" y1="10" x2="31" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <line x1="17" y1="31" x2="10" y2="38" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3>Aerospace · Mechanical · Robotics Projects</h3>
+          <p>End-to-end project execution for R&D and product development in aerospace, mechanical systems, and robotics
+            integration.</p>
+        </div>
+        <div class="service-tile" data-reveal>
+          <div class="tile-num">05</div>
+          <!-- 3D Printing: layered extrusion nozzle -->
+          <div class="tile-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="14" y="6" width="20" height="8" rx="2" stroke="currentColor" stroke-width="2" fill="none" />
+              <path d="M20 14 L20 22 L28 22 L28 14" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                fill="none" />
+              <path d="M22 22 L22 28 L26 28 L26 22" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"
+                fill="none" />
+              <path d="M23 28 L23 32 L25 32 L25 28" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"
+                fill="none" />
+              <path d="M18 36 Q24 34 30 36 Q36 38 30 40 Q24 42 18 40 Q12 38 18 36 Z" stroke="currentColor"
+                stroke-width="1.5" fill="none" />
+            </svg>
+          </div>
+          <h3>3D Printing</h3>
+          <p>Rapid prototyping and production-grade additive manufacturing for UAV parts, jigs, and custom components.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOVERNMENT / TARGETS -->
+  <section class="section" id="targets">
+    <div class="container">
+      <div class="two-col">
+        <div class="col-left" data-reveal>
+          <span class="section-tag">Initial Applications</span>
+          <h2 class="section-title">Built for<br><em>Critical Missions</em></h2>
+          <p class="section-desc">SamSky systems address the most demanding operational requirements in Indian
+            government and defence contexts.</p>
+
+          <div class="initial-targets">
+            <div class="it-item">
+              <!-- Flood Monitoring: water waves + eye/camera -->
+              <span class="it-icon">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 26 Q8 22 12 26 Q16 30 20 26 Q24 22 28 26 Q32 30 36 26" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" fill="none" />
+                  <path d="M4 32 Q8 28 12 32 Q16 36 20 32 Q24 28 28 32 Q32 36 36 32" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" fill="none" />
+                  <path d="M12 18 L16 8 L24 8 L28 18" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                    fill="none" />
+                  <circle cx="20" cy="14" r="3" stroke="currentColor" stroke-width="1.5" fill="none" />
+                </svg>
+              </span>
+              <div>
+                <strong>Flood Monitoring</strong>
+                <p>Real-time aerial surveillance for disaster management and flood relief coordination.</p>
+              </div>
+            </div>
+            <div class="it-item">
+              <!-- Surveillance: eye with scan lines -->
+              <span class="it-icon">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 20 Q12 8 20 8 Q28 8 36 20 Q28 32 20 32 Q12 32 4 20 Z" stroke="currentColor"
+                    stroke-width="2" fill="none" />
+                  <circle cx="20" cy="20" r="5" stroke="currentColor" stroke-width="2" fill="none" />
+                  <circle cx="20" cy="20" r="2" stroke="currentColor" stroke-width="1.5" fill="none" />
+                  <line x1="8" y1="14" x2="12" y2="17" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" />
+                  <line x1="32" y1="14" x2="28" y2="17" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" />
+                </svg>
+              </span>
+              <div>
+                <strong>Surveillance</strong>
+                <p>Persistent area monitoring for border security and critical infrastructure protection.</p>
+              </div>
+            </div>
+            <div class="it-item">
+              <!-- Hobby & Sport: controller / joystick -->
+              <span class="it-icon">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="6" y="14" width="28" height="16" rx="8" stroke="currentColor" stroke-width="2" fill="none" />
+                  <line x1="14" y1="19" x2="14" y2="25" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="11" y1="22" x2="17" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="26" cy="20" r="2" stroke="currentColor" stroke-width="1.5" fill="none" />
+                  <circle cx="30" cy="24" r="2" stroke="currentColor" stroke-width="1.5" fill="none" />
+                </svg>
+              </span>
+              <div>
+                <strong>Hobby & Sport</strong>
+                <p>Entry-level systems for civilian UAV enthusiasts and competitive pilots.</p>
+              </div>
+            </div>
+            <div class="it-item">
+              <!-- Defence Applications: shield with circuit -->
+              <span class="it-icon">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 4 L34 10 L34 22 Q34 32 20 37 Q6 32 6 22 L6 10 Z" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" fill="none" />
+                  <path d="M14 20 L18 24 L26 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </svg>
+              </span>
+              <div>
+                <strong>Defence Applications</strong>
+                <p>Tactical systems for defence forces requiring reliability in contested environments.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right" data-reveal>
+          <div class="main-target-card">
+            <div class="mt-header">
+              <span class="section-tag" style="background:rgba(255,255,255,0.15); color:#fff;">Main Target
+                Sectors</span>
+            </div>
+            <div class="mt-items">
+              <div class="mt-item">
+                <!-- Indian Army: star + crossed swords -->
+                <div class="mt-icon">
+                  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="20,4 23,14 34,14 25,21 28,32 20,25 12,32 15,21 6,14 17,14" stroke="currentColor"
+                      stroke-width="2" stroke-linejoin="round" fill="none" />
+                  </svg>
+                </div>
+                <div class="mt-info">
+                  <h4>Indian Army</h4>
+                  <p>Tactical reconnaissance and battlefield awareness systems for ground forces.</p>
+                </div>
+                <div class="mt-badge">Primary</div>
+              </div>
+              <div class="mt-item">
+                <!-- Indian Navy: anchor -->
+                <div class="mt-icon">
+                  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="10" r="4" stroke="currentColor" stroke-width="2" fill="none" />
+                    <line x1="20" y1="14" x2="20" y2="36" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" />
+                    <line x1="12" y1="22" x2="28" y2="22" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" />
+                    <path d="M12 36 Q16 30 20 36 Q24 30 28 36" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" fill="none" />
+                  </svg>
+                </div>
+                <div class="mt-info">
+                  <h4>Indian Navy</h4>
+                  <p>Maritime surveillance and underwater drone systems for naval operations.</p>
+                </div>
+                <div class="mt-badge">Primary</div>
+              </div>
+              <div class="mt-item">
+                <!-- Defence Establishments: building/factory with radar dish -->
+                <div class="mt-icon">
+                  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="6" y="20" width="18" height="16" stroke="currentColor" stroke-width="2" fill="none" />
+                    <path d="M6 20 L15 10 L24 20" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                      fill="none" />
+                    <rect x="12" y="26" width="6" height="10" stroke="currentColor" stroke-width="1.5" fill="none" />
+                    <path d="M28 14 Q32 10 36 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      fill="none" />
+                    <path d="M26 18 Q32 12 38 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      fill="none" />
+                    <line x1="32" y1="18" x2="32" y2="36" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" />
+                    <line x1="28" y1="36" x2="36" y2="36" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" />
+                  </svg>
+                </div>
+                <div class="mt-info">
+                  <h4>Defence Establishments</h4>
+                  <p>Integrated UAV solutions for DRDO, HAL, and allied defence PSUs.</p>
+                </div>
+                <div class="mt-badge">Primary</div>
+              </div>
+            </div>
+            <div class="mt-cta">
+              <a href="#contact" class="btn-primary-light">Request Defence Briefing</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY SAMSKY -->
+  <section class="section section-alt" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Why SamSky</span>
+        <h2 class="section-title">Precision.<br><em>Performance. Pride.</em></h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-item" data-reveal>
+          <div class="why-num">01</div>
+          <h4>Made in India</h4>
+          <p>Indigenously designed and manufactured UAV systems supporting Atmanirbhar Bharat in defence and aerospace.
+          </p>
+        </div>
+        <div class="why-item" data-reveal>
+          <div class="why-num">02</div>
+          <h4>Multi-Domain Expertise</h4>
+          <p>Covering aerial, underwater, and ground robotics with deep engineering capability across all domains.</p>
+        </div>
+        <div class="why-item" data-reveal>
+          <div class="why-num">03</div>
+          <h4>Government-Ready</h4>
+          <p>Systems designed from ground-up for government procurement standards and defence certification pathways.
+          </p>
+        </div>
+        <div class="why-item" data-reveal>
+          <div class="why-num">04</div>
+          <h4>Full-Stack Engineering</h4>
+          <p>From CFD simulations to composite fabrication to 3D printing — everything in-house for faster iteration.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact-section" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-left" data-reveal>
+          <span class="section-tag">Get in Touch</span>
+          <h2 class="section-title">Ready to<br><em>Elevate?</em></h2>
+          <p>Whether you're a defence procurement officer, a research institution, or a government body — we're ready to
+            brief you on SamSky capabilities.</p>
+
+          <div class="contact-details">
+            <a href="tel:9444670477" class="contact-link">
+              <!-- Telephone handset SVG -->
+              <span class="c-icon">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6 4 C6 4 4 4 4 6 L4 10 C4 10 4 26 22 28 L26 28 C26 28 28 28 28 26 L28 22 C28 22 28 20 26 20 L22 18 C22 18 20 18 20 20 L19 21 C19 21 17 22 14 19 L13 18 C10 15 11 13 11 13 L12 12 C12 12 14 12 14 10 L12 6 C12 6 12 4 10 4 Z"
+                    stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none" />
+                </svg>
+              </span>
+              <span>+91 9444670477</span>
+            </a>
+            <a href="mailto:balaaero07@gmail.com" class="contact-link">
+              <!-- Envelope SVG -->
+              <span class="c-icon">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="7" width="26" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none" />
+                  <path d="M3 9 L16 18 L29 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </svg>
+              </span>
+              <span>balaaero07@gmail.com</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-right" data-reveal>
+          <form class="contact-form" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact-name">Full Name</label>
+                <input type="text" id="contact-name" name="name" placeholder="Arjun Kumar" required />
+              </div>
+              <div class="form-group">
+                <label for="contact-organisation">Organisation</label>
+                <input type="text" id="contact-organisation" name="organisation" placeholder="Indian Army / DRDO / etc." />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" name="email" placeholder="your@org.gov.in" required />
+            </div>
+            <div class="form-group">
+              <label for="contact-interest">Area of Interest</label>
+              <select id="contact-interest" name="interest">
+                <option>VTOL Hybrid System</option>
+                <option>Underwater Drone</option>
+                <option>Training Systems</option>
+                <option>Defence Surveillance</option>
+                <option>CFD / Engineering Services</option>
+                <option>Government Procurement</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contact-message">Message</label>
+              <textarea id="contact-message" name="message" rows="4" placeholder="Describe your mission requirements..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Send Inquiry <span>→</span></button>
+            <div id="form-success" class="form-success" style="display:none">✓ Message sent! We'll respond within 24
+              hours.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <span class="logo-icon">SS</span>
+            <span class="logo-text">SAM<span class="logo-accent">SKY</span> DRONE SYSTEM</span>
+          </a>
+          <p>Engineered for India's sky.<br>Built for national strength.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h5>Products</h5>
+            <a href="#products">VTOL Hybrid</a>
+            <a href="#products">Underwater Drone</a>
+            <a href="#products">Training Plane</a>
+            <a href="#products">Training Drone</a>
+          </div>
+          <div class="footer-col">
+            <h5>Services</h5>
+            <a href="#services">Maintenance</a>
+            <a href="#services">CFD Analysis</a>
+            <a href="#services">Composite Fabrication</a>
+            <a href="#services">3D Printing</a>
+          </div>
+          <div class="footer-col">
+            <h5>Contact</h5>
+            <a href="tel:9444670477">+91 9444670477</a>
+            <a href="mailto:balaaero07@gmail.com">balaaero07@gmail.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 SamSky Drone Systems. All rights reserved.</span>
+        <span>Made in India</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Three.js OBJ Viewer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="script.js?v=1.0.2"></script>
+  <script src="drone-viewer.js?v=1.0.2"></script>
+</body>
+
+</html>
