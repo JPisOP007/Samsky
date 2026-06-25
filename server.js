@@ -7,6 +7,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 8082;
 const SUBMISSIONS_FILE = path.join(__dirname, 'submissions.json');
+const BOOKINGS_FILE = path.join(__dirname, 'bookings.json');
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'samsky2026';
 
 // Middleware
@@ -100,6 +101,85 @@ app.get('/api/submissions', async (req, res) => {
   } catch (error) {
     console.error('[API] Error retrieving submissions:', error);
     return res.status(500).json({ error: 'Server error retrieving submissions.' });
+  }
+});
+
+// POST /api/bookings - Save new consultation booking
+app.post('/api/bookings', async (req, res) => {
+  try {
+    const { name, email, organisation, date, timeSlot, topic, message } = req.body;
+
+    // Validation
+    if (!name || !email || !date || !timeSlot) {
+      return res.status(400).json({ error: 'Name, email, date, and time slot are required.' });
+    }
+
+    // Load existing bookings
+    let bookings = [];
+    try {
+      const fileData = await fs.readFile(BOOKINGS_FILE, 'utf8');
+      bookings = JSON.parse(fileData);
+    } catch (err) {
+      bookings = [];
+    }
+
+    // Create new booking entry
+    const newEntry = {
+      id: 'book_' + Math.random().toString(36).substr(2, 9),
+      name,
+      email,
+      organisation: organisation || '',
+      date,
+      timeSlot,
+      topic: topic || 'General Consultation',
+      message: message || '',
+      timestamp: new Date().toISOString()
+    };
+
+    bookings.push(newEntry);
+
+    // Save back to file
+    await fs.writeFile(BOOKINGS_FILE, JSON.stringify(bookings, null, 2), 'utf8');
+
+    console.log(`[API] New booking registered for ${name} on ${date} at ${timeSlot}`);
+    return res.status(201).json({ success: true, booking: newEntry });
+  } catch (error) {
+    console.error('[API] Error handling booking submission:', error);
+    return res.status(500).json({ error: 'Server error processing booking. Please try again.' });
+  }
+});
+
+// GET /api/bookings - Retrieve all bookings (Admin access)
+app.get('/api/bookings', async (req, res) => {
+  try {
+    // Password checking
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Access denied. Authorization header missing.' });
+    }
+
+    const token = authHeader.replace('Bearer ', '').trim();
+    if (token !== ADMIN_PASSWORD) {
+      return res.status(403).json({ error: 'Access denied. Invalid credentials.' });
+    }
+
+    // Load bookings
+    let fileData = '[]';
+    try {
+      fileData = await fs.readFile(BOOKINGS_FILE, 'utf8');
+    } catch (err) {
+      await fs.writeFile(BOOKINGS_FILE, '[]', 'utf8');
+    }
+    
+    const bookings = JSON.parse(fileData);
+    
+    // Sort bookings: newest booking registration date first
+    bookings.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    return res.json({ success: true, bookings });
+  } catch (error) {
+    console.error('[API] Error retrieving bookings:', error);
+    return res.status(500).json({ error: 'Server error retrieving bookings.' });
   }
 });
 

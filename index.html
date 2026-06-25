@@ -270,6 +270,53 @@
     </div>
   </section>
 
+  <!-- DRONEBUILDER PROMO SECTION -->
+  <section class="section section-alt" id="dronebuilder-promo" data-reveal>
+    <div class="container">
+      <div class="builder-promo-card">
+        <div class="builder-promo-content">
+          <span class="section-tag">New Feature</span>
+          <h2 class="promo-title">Start Building Your Drone Online</h2>
+          <p class="promo-intro">Build your drone with our custom drone-building tool <strong>DroneBuilder</strong>.</p>
+          
+          <ul class="promo-features">
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Configure your drone exactly to your needs</span>
+            </li>
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Consult your configuration with our specialist for free</span>
+            </li>
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Use our expertise to find the right components</span>
+            </li>
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Perfect your drone design</span>
+            </li>
+          </ul>
+
+          <p class="promo-note">
+            Be one step ahead and save your valuable resources with our expertise gained from years of research, development, and countless successful real-world experiments.
+          </p>
+
+          <div class="promo-actions">
+            <a href="#" class="btn-primary" onclick="alert('DroneBuilder 3D editor is opening in simulation mode... (Promo Only)'); return false;">Visit DroneBuilder</a>
+            <span class="or-divider">-or-</span>
+            <button class="btn-ghost" onclick="openBookingModal()">Book a Consultation</button>
+          </div>
+        </div>
+        
+        <div class="builder-promo-image-container">
+          <img src="drone_builder_ui.png" alt="Samsky DroneBuilder Dashboard Interface" class="builder-promo-image" />
+          <div class="image-glow"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- SERVICES -->
   <section class="section section-alt" id="services">
     <div class="container">
@@ -689,6 +736,127 @@
       </div>
     </div>
   </footer>
+
+  <!-- BOOKING MODAL -->
+  <div class="booking-modal-overlay" id="bookingModal" onclick="closeBookingModalOnOuterClick(event)">
+    <div class="booking-modal-card">
+      <button class="booking-modal-close" onclick="closeBookingModal()" aria-label="Close modal">&times;</button>
+      
+      <div class="booking-modal-header">
+        <h3 class="orbitron">Book a Consultation</h3>
+        <p>Schedule a 1-on-1 session with our drone engineers</p>
+      </div>
+
+      <div class="booking-modal-steps">
+        <div class="modal-step-indicator active" id="indicator-step-1"><span>1</span> Date & Time</div>
+        <div class="modal-step-indicator" id="indicator-step-2"><span>2</span> Your Details</div>
+      </div>
+
+      <form id="booking-form" onsubmit="handleBookingSubmit(event)">
+        <!-- STEP 1: DATE & TIME SELECTOR -->
+        <div class="booking-step-content" id="booking-step-1">
+          <div class="booking-form-group">
+            <label>1. Select Consultation Date</label>
+            <div class="date-selector-grid" id="booking-date-grid">
+              <!-- Dynamically populated dates -->
+            </div>
+            
+            <div class="custom-date-picker-container">
+              <span class="custom-date-label">Or choose a custom date:</span>
+              <input type="date" id="custom-booking-date" class="custom-date-input" onchange="handleCustomDateChange(this)" />
+            </div>
+
+            <input type="hidden" id="selected-booking-date" name="date" required />
+          </div>
+
+          <div class="booking-form-group" style="margin-top: 1.5rem;">
+            <label>2. Select Available Time Slot</label>
+            <div class="slots-selector-grid" id="booking-slots-grid">
+              <!-- Dynamically populated time slots -->
+            </div>
+            <input type="hidden" id="selected-booking-slot" name="timeSlot" required />
+          </div>
+          
+          <div class="booking-step-footer" style="margin-top: 2rem;">
+            <button type="button" class="btn-booking-next" onclick="goToBookingStep(2)">Next Step &rarr;</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: USER DETAILS -->
+        <div class="booking-step-content hidden" id="booking-step-2">
+          <div class="booking-details-header">
+            <h4>Consultation Information</h4>
+            <p>Please enter your details to finalize the appointment request.</p>
+          </div>
+
+          <div class="booking-form-grid">
+            <div class="booking-form-group">
+              <label for="booking-name">Full Name <span class="required-mark">*</span></label>
+              <input type="text" id="booking-name" name="name" class="booking-input" placeholder="e.g. Vikram Malhotra" required />
+            </div>
+            
+            <div class="booking-form-group">
+              <label for="booking-org">Organisation</label>
+              <input type="text" id="booking-org" name="organisation" class="booking-input" placeholder="e.g. HAL / DRDO / Private Entity" />
+            </div>
+
+            <div class="booking-form-group">
+              <label for="booking-email">Email Address <span class="required-mark">*</span></label>
+              <input type="email" id="booking-email" name="email" class="booking-input" placeholder="e.g. name@organisation.gov.in" required />
+            </div>
+
+            <div class="booking-form-group">
+              <label for="booking-topic">Area of Consultation <span class="required-mark">*</span></label>
+              <div class="select-wrapper">
+                <select id="booking-topic" name="topic" class="booking-input booking-select" required>
+                  <option value="Drone Design Configuration">Drone Design & Custom Configuration</option>
+                  <option value="VTOL Propulsion Systems">VTOL Propulsion Systems</option>
+                  <option value="Underwater Robotics">Underwater Reconnaissance & Robotics</option>
+                  <option value="Defence payload validation">Defence Payload Validation</option>
+                  <option value="CFD and Aero simulations">CFD & Aerodynamic Simulations</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="booking-form-group full-width">
+              <label for="booking-message">Special Requirements / Message</label>
+              <textarea id="booking-message" name="message" class="booking-input booking-textarea" rows="3" placeholder="Describe your operational requirements or technical objectives..."></textarea>
+            </div>
+          </div>
+
+          <div class="booking-info-note">
+            All registration data is processed securely and protected under strict confidentiality guidelines.
+          </div>
+
+          <div class="booking-step-footer flex-row" style="margin-top: 1.5rem;">
+            <button type="button" class="btn-booking-prev" onclick="goToBookingStep(1)">&larr; Back</button>
+            <button type="submit" class="btn-booking-submit" id="btn-booking-submit-btn">Confirm Appointment &nbsp;✓</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- SUCCESS / ERROR SCREEN -->
+      <div class="booking-status-screen hidden" id="booking-success-screen">
+        <div class="status-icon success-icon">✓</div>
+        <h4 class="orbitron">Consultation Requested!</h4>
+        <p class="status-summary">We have successfully registered your booking.</p>
+        <div class="booking-details-receipt">
+          <div><strong>Date:</strong> <span id="receipt-date">-</span></div>
+          <div><strong>Time:</strong> <span id="receipt-time">-</span></div>
+          <div><strong>Topic:</strong> <span id="receipt-topic">-</span></div>
+        </div>
+        <p class="status-note">A calendar invite and brief confirmation have been sent to <span id="receipt-email" style="font-weight:600;">-</span>.</p>
+        <button class="btn-booking-close-success" onclick="closeBookingModal()">Done</button>
+      </div>
+
+      <div class="booking-status-screen hidden" id="booking-error-screen">
+        <div class="status-icon error-icon">✗</div>
+        <h4 class="orbitron">Booking Failed</h4>
+        <p>Something went wrong. Please check your network connection and try again.</p>
+        <button class="btn-booking-retry" onclick="goToBookingStep(1)">Try Again</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Three.js OBJ Viewer -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

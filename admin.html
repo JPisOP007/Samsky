@@ -523,6 +523,51 @@
         padding: 0.75rem 1rem;
       }
     }
+
+    /* Tabs Styling */
+    .admin-tabs {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.25rem;
+    }
+    .admin-tab-btn {
+      background: transparent;
+      border: none;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .admin-tab-btn:hover {
+      color: var(--text);
+    }
+    .admin-tab-btn.active {
+      color: var(--pubu-5);
+    }
+    .admin-tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -0.45rem;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--pubu-5);
+      border-radius: 3px;
+    }
+    
+    .detail-grid-bookings {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 0.7rem;
+      font-size: 0.87rem;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 
@@ -577,72 +622,152 @@
       </div>
     </header>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Total Inquiries</div>
-        <div class="stat-value" id="stat-total">0</div>
-        <div class="stat-desc">Inquiries registered in database</div>
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" id="tab-inquiries" onclick="switchTab('inquiries')">Inquiries Dashboard</button>
+      <button class="admin-tab-btn" id="tab-bookings" onclick="switchTab('bookings')">Consultation Bookings</button>
+    </div>
+
+    <!-- INQUIRIES SECTION -->
+    <div id="inquiries-section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Inquiries</div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-desc">Inquiries registered in database</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Defence / Navy</div>
+          <div class="stat-value" id="stat-defence">0</div>
+          <div class="stat-desc">Critical government requests</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">VTOL Hybrid</div>
+          <div class="stat-value" id="stat-vtol">0</div>
+          <div class="stat-desc">Flagship system inquiries</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Defence / Navy</div>
-        <div class="stat-value" id="stat-defence">0</div>
-        <div class="stat-desc">Critical government requests</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">VTOL Hybrid</div>
-        <div class="stat-value" id="stat-vtol">0</div>
-        <div class="stat-desc">Flagship system inquiries</div>
+
+      <div class="table-container">
+        <div class="control-row">
+          <div class="search-filter">
+            <div class="search-input-wrap">
+              <input type="text" id="search-input" class="form-control"
+                placeholder="Search by name, organisation, message..." oninput="filterData()">
+            </div>
+            <select id="interest-filter" class="filter-dropdown" onchange="filterData()">
+              <option value="ALL">All Interests</option>
+              <option value="VTOL Hybrid System">VTOL Hybrid System</option>
+              <option value="Underwater Drone">Underwater Drone</option>
+              <option value="Training Systems">Training Systems</option>
+              <option value="Defence Surveillance">Defence Surveillance</option>
+              <option value="CFD / Engineering Services">CFD / Engineering Services</option>
+              <option value="Government Procurement">Government Procurement</option>
+            </select>
+          </div>
+          <button class="btn-action" onclick="exportToCSV()" style="border-color: #a8d4b8; color: var(--success);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export CSV
+          </button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="submissions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Organisation</th>
+                <th>Email Address</th>
+                <th>Area of Interest</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+
+          <div id="no-data" class="empty-state" style="display:none;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p>No inquiries found matching your filters.</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="table-container">
-      <div class="control-row">
-        <div class="search-filter">
-          <div class="search-input-wrap">
-            <input type="text" id="search-input" class="form-control"
-              placeholder="Search by name, organisation, message..." oninput="filterData()">
-          </div>
-          <select id="interest-filter" class="filter-dropdown" onchange="filterData()">
-            <option value="ALL">All Interests</option>
-            <option value="VTOL Hybrid System">VTOL Hybrid System</option>
-            <option value="Underwater Drone">Underwater Drone</option>
-            <option value="Training Systems">Training Systems</option>
-            <option value="Defence Surveillance">Defence Surveillance</option>
-            <option value="CFD / Engineering Services">CFD / Engineering Services</option>
-            <option value="Government Procurement">Government Procurement</option>
-          </select>
+    <!-- BOOKINGS SECTION -->
+    <div id="bookings-section" style="display:none;">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Bookings</div>
+          <div class="stat-value" id="stat-bookings-total">0</div>
+          <div class="stat-desc">Consultation requests registered</div>
         </div>
-        <button class="btn-action" onclick="exportToCSV()" style="border-color: #a8d4b8; color: var(--success);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Export CSV
-        </button>
+        <div class="stat-card">
+          <div class="stat-label">This Week</div>
+          <div class="stat-value" id="stat-bookings-week">0</div>
+          <div class="stat-desc">Bookings in the next 7 days</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Most Popular Area</div>
+          <div class="stat-value" id="stat-bookings-popular" style="font-size: 1.1rem; line-height: 2rem;">None</div>
+          <div class="stat-desc">Top consultation interest area</div>
+        </div>
       </div>
 
-      <div class="table-wrap">
-        <table id="submissions-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Organisation</th>
-              <th>Email Address</th>
-              <th>Area of Interest</th>
-            </tr>
-          </thead>
-          <tbody id="table-body"></tbody>
-        </table>
+      <div class="table-container">
+        <div class="control-row">
+          <div class="search-filter">
+            <div class="search-input-wrap">
+              <input type="text" id="search-bookings-input" class="form-control"
+                placeholder="Search bookings by name, organisation, message..." oninput="filterBookingsData()">
+            </div>
+            <select id="booking-topic-filter" class="filter-dropdown" onchange="filterBookingsData()">
+              <option value="ALL">All Topics</option>
+              <option value="Drone Design Configuration">Drone Design & Custom Configuration</option>
+              <option value="VTOL Propulsion Systems">VTOL Propulsion Systems</option>
+              <option value="Underwater Robotics">Underwater Reconnaissance & Robotics</option>
+              <option value="Defence payload validation">Defence Payload Validation</option>
+              <option value="CFD and Aero simulations">CFD & Aerodynamic Simulations</option>
+            </select>
+          </div>
+          <button class="btn-action" onclick="exportBookingsToCSV()" style="border-color: #a8d4b8; color: var(--success);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export CSV
+          </button>
+        </div>
 
-        <div id="no-data" class="empty-state" style="display:none;">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <p>No inquiries found matching your filters.</p>
+        <div class="table-wrap">
+          <table id="bookings-table">
+            <thead>
+              <tr>
+                <th>Booking Date</th>
+                <th>Time Slot</th>
+                <th>Name</th>
+                <th>Organisation</th>
+                <th>Area of Interest</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-table-body"></tbody>
+          </table>
+
+          <div id="no-bookings-data" class="empty-state" style="display:none;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p>No bookings found matching your filters.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -651,6 +776,9 @@
   <script>
     let rawSubmissions = [];
     let activeSubmissions = [];
+    let rawBookings = [];
+    let activeBookings = [];
+    let currentTab = 'inquiries';
 
     document.addEventListener('DOMContentLoaded', () => {
       const token = localStorage.getItem('samsky_token');
@@ -664,6 +792,7 @@
 
       localStorage.setItem('samsky_token', pwd);
 
+      // Verify credentials with submissions API first
       fetch('/api/submissions', {
         headers: { 'Authorization': `Bearer ${pwd}` }
       })
@@ -703,22 +832,57 @@
       if (!token) return handleLogout();
 
       try {
-        const res = await fetch('/api/submissions', {
+        // Fetch inquiries
+        const resSub = await fetch('/api/submissions', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (res.status === 401 || res.status === 403) return handleLogout();
+        if (resSub.status === 401 || resSub.status === 403) return handleLogout();
 
-        const data = await res.json();
-        if (data.success) {
-          rawSubmissions = data.submissions;
+        const dataSub = await resSub.json();
+        if (dataSub.success) {
+          rawSubmissions = dataSub.submissions;
           filterData();
+        }
+
+        // Fetch bookings
+        const resBook = await fetch('/api/bookings', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (resBook.status === 401 || resBook.status === 403) return handleLogout();
+
+        const dataBook = await resBook.json();
+        if (dataBook.success) {
+          rawBookings = dataBook.bookings;
+          filterBookingsData();
         }
       } catch (err) {
         alert('Failed to connect to backend server. Make sure node server.js is running.');
         console.error(err);
       }
     }
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+      const tabInq = document.getElementById('tab-inquiries');
+      const tabBook = document.getElementById('tab-bookings');
+      const secInq = document.getElementById('inquiries-section');
+      const secBook = document.getElementById('bookings-section');
+
+      if (tabId === 'inquiries') {
+        tabInq.classList.add('active');
+        tabBook.classList.remove('active');
+        secInq.style.display = 'block';
+        secBook.style.display = 'none';
+      } else {
+        tabBook.classList.add('active');
+        tabInq.classList.remove('active');
+        secBook.style.display = 'block';
+        secInq.style.display = 'none';
+      }
+    }
+    window.switchTab = switchTab;
 
     function updateStats(items) {
       document.getElementById('stat-total').textContent = items.length;
@@ -818,7 +982,7 @@
       if (panel.classList.contains('open')) {
         panel.classList.remove('open');
       } else {
-        document.querySelectorAll('.detail-row').forEach(row => row.classList.remove('open'));
+        document.querySelectorAll('#table-body .detail-row').forEach(row => row.classList.remove('open'));
         panel.classList.add('open');
       }
     }
@@ -841,6 +1005,167 @@
       link.click();
       document.body.removeChild(link);
     }
+
+    // ============================
+    // BOOKINGS DASHBOARD JS
+    // ============================
+    function filterBookingsData() {
+      const searchQuery = document.getElementById('search-bookings-input').value.toLowerCase().trim();
+      const topicFilter = document.getElementById('booking-topic-filter').value;
+
+      activeBookings = rawBookings.filter(entry => {
+        if (topicFilter !== 'ALL' && entry.topic !== topicFilter) return false;
+        if (searchQuery) {
+          const matchText = [entry.name, entry.organisation, entry.email, entry.topic, entry.message, entry.date, entry.timeSlot].join(' ').toLowerCase();
+          return matchText.includes(searchQuery);
+        }
+        return true;
+      });
+
+      renderBookingsTable();
+      updateBookingsStats(activeBookings);
+    }
+    window.filterBookingsData = filterBookingsData;
+
+    function renderBookingsTable() {
+      const tbody = document.getElementById('bookings-table-body');
+      const emptyState = document.getElementById('no-bookings-data');
+      tbody.innerHTML = '';
+
+      if (activeBookings.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      activeBookings.forEach(entry => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('onclick', `toggleBookingDetails('${entry.id}')`);
+
+        const date = new Date(entry.date);
+        const formattedBookingDate = date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+
+        let tagClass = 'tag-general';
+        if (entry.topic.includes('Design') || entry.topic.includes('Config')) tagClass = 'tag-vtol';
+        else if (entry.topic.includes('Propulsion')) tagClass = 'tag-underwater';
+        else if (entry.topic.includes('Defence')) tagClass = 'tag-defence';
+
+        tr.innerHTML = `
+          <td style="font-weight:600;">${formattedBookingDate}</td>
+          <td class="timestamp">${entry.timeSlot}</td>
+          <td style="font-weight:600;">${escapeHTML(entry.name)}</td>
+          <td>${entry.organisation ? escapeHTML(entry.organisation) : '<span style="color:var(--text-muted);">—</span>'}</td>
+          <td><span class="tag ${tagClass}">${escapeHTML(entry.topic)}</span></td>
+        `;
+
+        const detailTr = document.createElement('tr');
+        detailTr.id = `booking-detail-${entry.id}`;
+        detailTr.className = 'detail-row';
+        
+        const regDate = new Date(entry.timestamp);
+        const regFormatted = regDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) +
+          ' ' + regDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+        detailTr.innerHTML = `
+          <td colspan="5">
+            <div class="detail-content">
+              <div class="detail-grid-bookings">
+                <span class="detail-label">Name:</span>
+                <span>${escapeHTML(entry.name)}</span>
+                <span class="detail-label">Email:</span>
+                <span><a href="mailto:${entry.email}" style="color:var(--accent); text-decoration:underline;" onclick="event.stopPropagation();">${escapeHTML(entry.email)}</a></span>
+                <span class="detail-label">Organisation:</span>
+                <span>${entry.organisation ? escapeHTML(entry.organisation) : '<span style="color:var(--text-muted);">Not specified</span>'}</span>
+                <span class="detail-label">Consultation Date:</span>
+                <span>${formattedBookingDate} @ ${entry.timeSlot}</span>
+                <span class="detail-label">Requested On:</span>
+                <span>${regFormatted}</span>
+                <span class="detail-label">Topic:</span>
+                <span>${escapeHTML(entry.topic)}</span>
+              </div>
+              <div class="detail-label">Message / Requirements:</div>
+              <div class="message-box">${entry.message ? escapeHTML(entry.message) : '<span style="color:var(--text-muted); font-style:italic;">No requirements specified.</span>'}</div>
+            </div>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+        tbody.appendChild(detailTr);
+      });
+    }
+
+    function toggleBookingDetails(id) {
+      const panel = document.getElementById(`booking-detail-${id}`);
+      if (panel.classList.contains('open')) {
+        panel.classList.remove('open');
+      } else {
+        document.querySelectorAll('#bookings-table-body .detail-row').forEach(row => row.classList.remove('open'));
+        panel.classList.add('open');
+      }
+    }
+    window.toggleBookingDetails = toggleBookingDetails;
+
+    function updateBookingsStats(items) {
+      document.getElementById('stat-bookings-total').textContent = items.length;
+
+      // Filter bookings in the next 7 days
+      const today = new Date();
+      const nextWeek = new Date();
+      nextWeek.setDate(today.getDate() + 7);
+      
+      const weekCount = items.filter(entry => {
+        const bookingDate = new Date(entry.date);
+        return bookingDate >= today && bookingDate <= nextWeek;
+      }).length;
+      document.getElementById('stat-bookings-week').textContent = weekCount;
+
+      // Calculate popular topic
+      if (items.length === 0) {
+        document.getElementById('stat-bookings-popular').textContent = 'None';
+        return;
+      }
+      
+      const topicsMap = {};
+      items.forEach(entry => {
+        topicsMap[entry.topic] = (topicsMap[entry.topic] || 0) + 1;
+      });
+      
+      let popularTopic = 'None';
+      let maxCount = 0;
+      for (const topic in topicsMap) {
+        if (topicsMap[topic] > maxCount) {
+          maxCount = topicsMap[topic];
+          popularTopic = topic;
+        }
+      }
+      
+      // Truncate name for display if long
+      if (popularTopic.length > 20) {
+        popularTopic = popularTopic.substring(0, 18) + '...';
+      }
+      document.getElementById('stat-bookings-popular').textContent = popularTopic;
+    }
+
+    function exportBookingsToCSV() {
+      if (activeBookings.length === 0) return alert('No data to export');
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Registration Date,Consultation Date,Time Slot,Name,Email,Organisation,Topic,Message\r\n";
+
+      activeBookings.forEach(entry => {
+        const regDate = new Date(entry.timestamp).toISOString();
+        csvContent += `"${regDate}","${entry.date}","${escapeCSVField(entry.timeSlot)}","${escapeCSVField(entry.name)}","${escapeCSVField(entry.email)}","${escapeCSVField(entry.organisation)}","${escapeCSVField(entry.topic)}","${escapeCSVField(entry.message)}"\r\n`;
+      });
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("download", `samsky_bookings_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    window.exportBookingsToCSV = exportBookingsToCSV;
 
     function escapeHTML(str) {
       if (!str) return '';
